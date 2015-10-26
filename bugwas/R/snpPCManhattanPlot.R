@@ -25,17 +25,17 @@
 #' Plot the a Manhattan plot organised by the signficance of PCs.
 #' 
 #' This function generates a Manhattan plot organised by the signficance of the principal components.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param triallelic A list called 'triallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param triallelic A list called 'triallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
 #' @param colourPalette A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.
 #' @param p.genomewidepc A matrix of the significant principal component and their correlation with lineages. This is Bayesian Wald test results produced by the function testGenomeWidePCs. If this is NULL then testGenomeWidePCs is called to generate the required test results. 
 #' @keywords SNP
 #' @keywords PCA
-#' @keywords Manhattan plot
+#' @keywords Manhattan-plot
 #' @export
 #' @examples
-#' snpPCManhattanPlot(config = config, biallelic = biallelic,  triallelic =  triallelic)
+#' snpPCManhattanPlot(config = data$config, biallelic = data$biallelic,  triallelic = data$triallelic)
 snpPCManhattanPlot = function(config, biallelic, triallelic, colourPalette = NULL){
 							 	
 	if(is.null(colourPalette)){

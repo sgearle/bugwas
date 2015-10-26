@@ -25,14 +25,14 @@
 #' Plots for GWAS on general variants
 #' 
 #' This function generates the various Manhattan plots for general variants.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
-#' @param genVars A list called 'genVars' created from the bugwas function. It is a required input.
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
+#' @param genVars A list called 'genVars' created from the lin_loc function. It is a required input.
 #' @param colourPalette A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.
-#' @keywords Manhattan plot
+#' @keywords Manhattan-plot
 #' @export
 #' @examples
-#' genVarPlots(genVars = genVars, biallelic = biallelic, config = config)
+#' genVarPlots(genVars = data$genVars, biallelic = data$biallelic, config = data$config)
 genVarPlots = function(genVars, biallelic, config, colourPalette = NULL){
 	
 	o = biallelic$pc_order$pc_order

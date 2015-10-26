@@ -27,10 +27,11 @@
 #' This function performs the genome-wide principal components.
 #' @param biallelic A list called 'biallelic' created from the bugwas function
 #' @param config A list called 'config' created from the bugwas function
-#' @keywords Bayesian Wald test, principal components
-#' @export
+#' @keywords Bayesian-Wald-test
+#' @keywords PCA
+#' @return The p-value of the Bayesian Wald test for the genome-wide effect of principal components.
 #' @examples
-#' testGenomeWidePCs(config, biallelic)
+#' testGenomeWidePCs(config = data$config, biallelic = data$biallelic)
 testGenomeWidePCs = function(config = NULL, biallelic = NULL){
 	p.genomewidepc = .testGenomeWidePCs(prefix = config$prefix,
 						pc.lim = biallelic$pc_order$pc.lim,

@@ -25,12 +25,12 @@
 #' Plot of the sample on the first two principal components
 #' 
 #' This function generates a plot of the sample on the first two principal components.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
-#' @keywords Reduced space plot
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
+#' @keywords Reduced-space-plot
 #' @export
 #' @examples
-#' plotIndividualBy2PCs(biallelic = biallelic, config = config)
+#' plotIndividualBy2PCs(biallelic = data$biallelic, config = data$config)
 plotIndividualBy2PCs = function(biallelic = NULL, config = NULL){
 	o = biallelic$pc_order$pc_order
 	pca = biallelic$pca

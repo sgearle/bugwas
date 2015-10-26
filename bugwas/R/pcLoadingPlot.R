@@ -25,12 +25,12 @@
 #' Plot PC loadings of all SNPs.
 #' 
 #' This function plots the loadings of all SNPs for each significant principle component identified by the Bayesian Wald test.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
-#' @keywords plot
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
+#' @keywords Scatter-plot
 #' @export
 #' @examples
-#' pcLoadingPlot(config = config, biallelic = biallelic)
+#' pcLoadingPlot(config = data$config, biallelic = data$biallelic)
 pcLoadingPlot = function(config, biallelic){
 	.pcLoadingsPlot(prefix = config$prefix, 
 					pca = biallelic$pca, 

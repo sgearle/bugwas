@@ -33,7 +33,7 @@
 #' @keywords plot
 #' @export
 #' @examples
-#' all_plots()
+#' all_plots(biallelic = data$biallelic, triallelic = data$triallelic, genVars = data$genVars, treeInfo = data$treeInfo, config = data$config)
 all_plots = function(biallelic = NULL,
                      triallelic = NULL,
                      genVars = NULL,

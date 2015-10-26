@@ -25,15 +25,16 @@
 #' Generates all plots.
 #' 
 #' This function that plots the true and predicted phenotypes on a tree.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
-#' @param treeInfo A list called 'treeInfo' created from the bugwas function. It is a required input.
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
+#' @param treeInfo A list called 'treeInfo' created from the lin_loc function. It is a required input.
 #' @param p.genomewidepc A matrix of the significant principal component and their correlation with lineages. This is Bayesian Wald test results produced by the function testGenomeWidePCs. If this is NULL then testGenomeWidePCs is called to generate the required test results. 
 #' @param colourPalette A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.
-#' @keywords plot
+#' @keywords Phenotype
+#' @keywords Phylogram
 #' @export
 #' @examples
-#' trueAndPredPhenoOnTreePlot(config = config, biallelic = biallelic, treeInfo = treeInfo)
+#' trueAndPredPhenoOnTreePlot(config = data$config, biallelic = data$biallelic, treeInfo = data$treeInfo)
 trueAndPredPhenoOnTreePlot = function(config, biallelic, treeInfo, 
 										p.genomewidepc = NULL, colourPalette = NULL){
 	if(is.null(p.genomewidepc)){

@@ -25,15 +25,16 @@
 #' Plot of the P-values of logistic regression versus those of LMM
 #' 
 #' This function generates the plot of the P-values of logistic regression versus those of SNP GWAS.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param triallelic A list called 'triallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param triallelic A list called 'triallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
 #' @param colourPalette A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.
 #' @keywords SNP
-#' @keywords Scatter plot
+#' @keywords Scatter-plot
+#' @keywords P-values
 #' @export
 #' @examples
-#' logregVsLMM(biallelic = biallelic, triallelic = triallelic, config = config)
+#' logregVsLMM(biallelic = data$biallelic, triallelic = data$triallelic, config = data$config)
 logregVsLMM = function(config, biallelic, triallelic, colourPalette = NULL){
 	sampleCount = length(biallelic$pheno)
 	

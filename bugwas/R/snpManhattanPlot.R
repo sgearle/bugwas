@@ -25,15 +25,15 @@
 #' Generates Manhattan plots for a SNP GWAS
 #' 
 #' This function generates the Manhattan plot(s) for a SNP GWAS.
-#' @param biallelic A list called 'biallelic' created from the bugwas function. It is a required input.
-#' @param triallelic A list called 'triallelic' created from the bugwas function. It is a required input.
-#' @param config A list called 'config' created from the bugwas function. It is a required input.
+#' @param biallelic A list called 'biallelic' created from the lin_loc function. It is a required input.
+#' @param triallelic A list called 'triallelic' created from the lin_loc function. It is a required input.
+#' @param config A list called 'config' created from the lin_loc function. It is a required input.
 #' @param colourPalette A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.
 #' @keywords SNP
-#' @keywords Manhattan plot
+#' @keywords Manhattan-plot
 #' @export
 #' @examples
-#' snpManhattanPlot(biallelic = biallelic, triallelic = triallelic, config = config)
+#' snpManhattanPlot(biallelic = data$biallelic, triallelic = data$triallelic, config = data$config)
 snpManhattanPlot = function(biallelic, triallelic, config, colourPalette = NULL){
 
 	sampleCount = length(biallelic$pheno)

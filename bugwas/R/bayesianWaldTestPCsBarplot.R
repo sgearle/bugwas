@@ -35,6 +35,8 @@
 #' @keywords Barplot
 #' @export
 #' @examples
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
 #' testGenomeWidePCs(config = data$config, biallelic = data$biallelic)
 bayesianWaldTestPCsBarplot = function(config, biallelic, treeInfo, colourPalette = NULL, p.genomewidepc = NULL){
 	

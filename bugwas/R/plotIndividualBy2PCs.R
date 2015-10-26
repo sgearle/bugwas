@@ -30,6 +30,8 @@
 #' @keywords Reduced-space-plot
 #' @export
 #' @examples
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
 #' plotIndividualBy2PCs(biallelic = data$biallelic, config = data$config)
 plotIndividualBy2PCs = function(biallelic = NULL, config = NULL){
 	o = biallelic$pc_order$pc_order

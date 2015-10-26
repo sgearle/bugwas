@@ -32,6 +32,8 @@
 #' @keywords Manhattan-plot
 #' @export
 #' @examples
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
 #' genVarPlots(genVars = data$genVars, biallelic = data$biallelic, config = data$config)
 genVarPlots = function(genVars, biallelic, config, colourPalette = NULL){
 	

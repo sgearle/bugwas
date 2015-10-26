@@ -33,7 +33,10 @@
 #' @keywords Manhattan-plot
 #' @export
 #' @examples
-#' snpManhattanPlot(biallelic = data$biallelic, triallelic = data$triallelic, config = data$config)
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
+#' snpManhattanPlot(biallelic = data$biallelic, triallelic = data$triallelic, 
+#'  config = data$config)
 snpManhattanPlot = function(biallelic, triallelic, config, colourPalette = NULL){
 
 	sampleCount = length(biallelic$pheno)

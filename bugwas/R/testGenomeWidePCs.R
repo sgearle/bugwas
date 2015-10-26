@@ -31,6 +31,8 @@
 #' @keywords PCA
 #' @return The p-value of the Bayesian Wald test for the genome-wide effect of principal components.
 #' @examples
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
 #' testGenomeWidePCs(config = data$config, biallelic = data$biallelic)
 testGenomeWidePCs = function(config = NULL, biallelic = NULL){
 	p.genomewidepc = .testGenomeWidePCs(prefix = config$prefix,

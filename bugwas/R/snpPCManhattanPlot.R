@@ -35,7 +35,10 @@
 #' @keywords Manhattan-plot
 #' @export
 #' @examples
-#' snpPCManhattanPlot(config = data$config, biallelic = data$biallelic,  triallelic = data$triallelic)
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
+#' snpPCManhattanPlot(biallelic = data$biallelic,  triallelic = data$triallelic,
+#'  config = data$config)
 snpPCManhattanPlot = function(config, biallelic, triallelic, colourPalette = NULL){
 							 	
 	if(is.null(colourPalette)){

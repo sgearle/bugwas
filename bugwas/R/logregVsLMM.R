@@ -34,6 +34,8 @@
 #' @keywords P-values
 #' @export
 #' @examples
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
 #' logregVsLMM(biallelic = data$biallelic, triallelic = data$triallelic, config = data$config)
 logregVsLMM = function(config, biallelic, triallelic, colourPalette = NULL){
 	sampleCount = length(biallelic$pheno)

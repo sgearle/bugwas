@@ -30,6 +30,8 @@
 #' @keywords Scatter-plot
 #' @export
 #' @examples
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
 #' pcLoadingPlot(config = data$config, biallelic = data$biallelic)
 pcLoadingPlot = function(config, biallelic){
 	.pcLoadingsPlot(prefix = config$prefix, 

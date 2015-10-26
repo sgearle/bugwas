@@ -34,7 +34,10 @@
 #' @keywords Phylogram
 #' @export
 #' @examples
-#' trueAndPredPhenoOnTreePlot(config = data$config, biallelic = data$biallelic, treeInfo = data$treeInfo)
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
+#' trueAndPredPhenoOnTreePlot(biallelic = data$biallelic, treeInfo = data$treeInfo,
+#'  config = data$config)
 trueAndPredPhenoOnTreePlot = function(config, biallelic, treeInfo, 
 										p.genomewidepc = NULL, colourPalette = NULL){
 	if(is.null(p.genomewidepc)){

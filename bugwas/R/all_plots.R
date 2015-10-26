@@ -33,7 +33,10 @@
 #' @keywords plot
 #' @export
 #' @examples
-#' all_plots(biallelic = data$biallelic, triallelic = data$triallelic, genVars = data$genVars, treeInfo = data$treeInfo, config = data$config)
+#' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
+#'  prefix = prefix, gem.path = gem.path)
+#' all_plots(biallelic = data$biallelic, triallelic = data$triallelic, 
+#' 	genVars = data$genVars, treeInfo = data$treeInfo, config = data$config)
 all_plots = function(biallelic = NULL,
                      triallelic = NULL,
                      genVars = NULL,

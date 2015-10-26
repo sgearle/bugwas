@@ -25,11 +25,11 @@
 #' Generates all plots.
 #' 
 #' This function generates all the plots
-#' @param biallelic A list called 'biallelic' created from the bugwas function
-#' @param triallelic A list called 'triallelic' created from the bugwas function
-#' @param genVars A list called 'genVars' created from the bugwas function
-#' @param treeInfo A list called 'treeInfo' created from the bugwas function
-#' @param config A list called 'config' created from the bugwas function
+#' @param biallelic A list called 'biallelic' created from the lin_loc function
+#' @param triallelic A list called 'triallelic' created from the lin_loc function
+#' @param genVars A list called 'genVars' created from the lin_loc function
+#' @param treeInfo A list called 'treeInfo' created from the lin_loc function
+#' @param config A list called 'config' created from the lin_loc function
 #' @keywords plot
 #' @export
 #' @examples

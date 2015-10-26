@@ -6,6 +6,9 @@ install.packages("[some_dir]/bugwas_1.0.tar.gz", repos = NULL, type="source")
 
 The package requires the modified version of GEMMA version 0.93. The executable file is available in this github repository in the gemma folder.
 
+If you would like to use our R package please site the paper on the following webpage:
+http://arxiv.org/abs/1510.06863
+
 Creators:
 Sarah Earle, NDM, Oxford University
 Jessie Wu, NDM, Oxford University

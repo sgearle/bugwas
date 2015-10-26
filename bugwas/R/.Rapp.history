@@ -1,0 +1,6 @@
+prod
+install.packages("/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/build/bugwas_0.0.0.9000.tar.gz", repos = NULL, type="source")
+lin_loc
+library(bugwas)
+lin_loc
+?lin_loc

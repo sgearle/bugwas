@@ -1,0 +1,1101 @@
+gRate[1:10]
+currTotNe = c(1:100)/10 - 1/20#
+gRate = c(-50:50)/10#
+#
+posterior = matrix(nrow=length(currTotNe), ncol = length(gRate))#
+#
+for(iCurrT in 1:length(currTotNe)){#
+	for(iGRate in 1:length(gRate)){#
+		totNe = getTotNe(currTotNe = currTotNe[iCurrT], midpt = midpt, rate = gRate[iGRate])#
+		posterior[iCurrT, iGRate] = calculateLogP(m = m, alpha = alpha, currTotNe = currTotNe, rate = rate, totNe = totNe, subNe = subNe)+log(dexp(currTotNe[iCurrT])) + log(1/100)#
+	}#
+	message(paste0("Completed: ", iCurrT, ".", sep=""))#
+}
+currTotNePost = rowSums(exp(posterior))/sum(rowSums(exp(posterior)))
+sum(currTotNePost*currTotNe)
+currTotNe[1:10]
+summary(currTotNe)
+summary(gRate)
+sum(currTotNePost)
+iCurrT=1
+summary(as.vector(posterior))
+calculateLogP = function(m = NULL, alpha = NULL, totNe = NULL, subNe = NULL){#
+#############################################################
+## interval 1#
+#############################################################
+tau1 = 0.1#
+etm1 = expm(tau1*m)#
+subNe1 = subNe[1,]#
+#
+p.l1.0 = c(1,0)#
+p.l2.0 = c(1,0)#
+p.l1.1m = p.l1.0%*%etm1#
+p.l2.1m = p.l2.0%*%etm1#
+#
+p.0 = rbind(p.l1.0, p.l2.0)#
+p.1m = rbind(p.l1.1m, p.l2.1m)#
+#
+intProbSum0 = getIntProbSum(p.0, subNe1)#
+logL11 = -tau1/2*intProbSum0 #
+#
+intProbSum1m = getIntProbSum(p.1m, subNe1)#
+logL12 = -tau1/2*intProbSum1m#
+#
+logL1 = logL11 + logL12#
+#############################################################
+#
+#############################################################
+## interval 2#
+#############################################################
+tau2 = 0.2#
+etm2 = expm(tau2*m)#
+subNe2 = subNe[2,]#
+#
+p.l1.1 = p.l1.1m#
+p.l2.1 = p.l2.1m#
+p.l3.1 = c(0,1)#
+p.l4.1 = c(0,1)#
+#
+p.l1.2m = p.l1.1%*%etm2#
+p.l2.2m = p.l2.1%*%etm2#
+p.l3.2m = p.l3.1%*%etm2#
+p.l4.2m = p.l4.1%*%etm2#
+#
+p.1 = rbind(p.l1.1, p.l2.1, p.l3.1, p.l4.1)#
+p.2m = rbind(p.l1.2m, p.l2.2m, p.l3.2m, p.l4.2m)#
+#
+intProbSum1 = getIntProbSum(p.1, subNe2)#
+logL21 = -tau2/2*intProbSum1 #
+#
+intProbSum2m = getIntProbSum(p.2m, subNe2)#
+logL22 = -tau2/2*intProbSum2m#
+coalRate2 = log(coalEvent(p.l3.2m, p.l4.2m, subNe2))#
+#
+logL2 = logL21 + logL22 + coalRate2#
+#############################################################
+## interval 3#
+#############################################################
+tau3 = 0.2#
+etm3 = expm(tau3*m)#
+subNe3 = subNe[3,]#
+#
+p.l1.2 = p.l1.2m#
+p.l2.2 = p.l1.2m#
+p.l5.2 = getAncLinProb(p.l3.2m, p.l4.2m, subNe3) #
+#
+p.l1.3m = p.l1.2%*%etm3#
+p.l2.3m = p.l2.2%*%etm3#
+p.l5.3m = p.l5.2%*%etm3#
+#
+p.2 = rbind(p.l1.2, p.l2.2, p.l5.2)#
+p.3m = rbind(p.l1.3m, p.l2.3m, p.l5.3m)#
+#
+intProbSum2 = getIntProbSum(p.2, subNe3)#
+logL31 = -tau3/2*intProbSum2#
+#
+intProbSum3m = getIntProbSum(p.3m, subNe3)#
+logL32 = -tau3/2*intProbSum3m#
+coalRate3 = log(coalEvent(p.l5.3m, p.l1.3m, subNe3))#
+#
+logL3 = logL31 + logL32 + coalRate3#
+#############################################################
+## interval 4#
+#############################################################
+tau4 = 0.05#
+etm4 = expm(tau4*m)#
+subNe4 = subNe[4,]#
+#
+p.l2.3 = p.l2.3m#
+p.l6.3 = getAncLinProb(p.l5.3m, p.l1.3m, subNe4)#
+#
+p.l2.4m = p.l2.3%*%etm4#
+p.l6.4m = p.l6.3%*%etm4#
+#
+p.3 = rbind(p.l2.3, p.l6.3)#
+p.4m = rbind(p.l2.4m, p.l6.4m)#
+#
+intProbSum3 = getIntProbSum(p.3, subNe4)#
+logL41 = -tau4/2*intProbSum3#
+#
+intProbSum4m = getIntProbSum(p.4m, subNe4)#
+logL42 = -tau4/2*intProbSum4m#
+#
+logL4 = logL41 + logL42#
+#############################################################
+## interval 5#
+#############################################################
+tau5 = 0.05#
+etm5 = expm(tau5*m)#
+subNe5 = subNe[5,]#
+#
+p.l2.4 = p.l2.4m#
+p.l6.4 = p.l6.4m#
+p.l7.4 = c(1,0)#
+#
+p.l2.5m = p.l2.4%*%etm5#
+p.l6.5m = p.l6.4%*%etm5#
+p.l7.5m = p.l7.4%*%etm5#
+#
+p.4 = rbind(p.l2.4, p.l6.4, p.l7.4)#
+p.5m = rbind(p.l2.5m, p.l6.5m, p.l7.5m)#
+intProbSum4 = getIntProbSum(p.4, subNe5)#
+logL51 = -tau5/2*intProbSum4#
+#
+intProbSum5m = getIntProbSum(p.5m, subNe5)#
+logL52 = -tau5/2*intProbSum5m#
+coalRate5 = log(coalEvent(p.l2.5m, p.l7.5m, subNe5))#
+#
+logL5 = logL51 + logL52 + coalRate5#
+#############################################################
+## interval 6#
+#############################################################
+tau6 = 0.1#
+etm6 = expm(tau6*m)#
+subNe6 = subNe[6,]#
+#
+p.l6.5 = p.l6.5m#
+p.l8.5 = getAncLinProb(p.l2.5m, p.l7.5m, subNe6)#
+#
+p.l6.6m = p.l6.5%*%etm6#
+p.l8.6m = p.l8.5%*%etm6#
+p.5 = rbind(p.l6.5, p.l8.5)#
+p.6m = rbind(p.l6.6m, p.l8.6m)#
+#
+intProbSum5 = getIntProbSum(p.5, subNe6)#
+logL61 = -tau6/2*intProbSum5#
+#
+intProbSum6m = getIntProbSum(p.6m, subNe6)#
+logL62 = -tau6/2*intProbSum6m#
+coalRate6 = log(coalEvent(p.l6.6m, p.l8.6m, subNe6))#
+#
+logL6 = logL61 + logL62 + coalRate6#
+#
+#############################################################
+logL = logL1 + logL2 + logL3 + logL4 + logL5 + logL6#
+return(logL)#
+}#
+#
+initialiseMigrationMatrix = function(rate1 = NULL, rate2 = NULL2){#
+	m = matrix(c(-rate1, rate1, rate2,-rate2), nrow = 2, byrow=T)#
+	return(m)#
+}#
+#
+getTotNe = function(currTotNe = NULL, rate = NULL, midpt = NULL){#
+	totNe = currTotNe*exp(midpt*rate)#
+	return(totNe)#
+}#
+#
+getPropNe = function(logitIntcpt = NULL, logitSlope = NULL, midpt = NULL){#
+	propNe1 = 1/(1+exp(-(logitIntcpt+logitSlope*midpt)))#
+	propNe = cbind(propNe1,1 - propNe1)#
+	return(propNe)#
+}
+gRate[iGRate]
+iCurrT=1
+iGRate=1
+gRate[iGRate]
+getTotNe(currTotNe = currTotNe[iCurrT], #
+						rate = gRate[iGRate],#
+							midpt = midpt)
+posterior[iCurrT, iGRate] = calculateLogP(m = m, alpha = alpha, currTotNe = currTotNe, rate = gRate, totNe = totNe, subNe = subNe)+log(dexp(currTotNe[iCurrT])) + log(1/10)
+posterior[iCurrT, iGRate] = calculateLogP(m = m, alpha = alpha, totNe = totNe, subNe = subNe)+log(dexp(currTotNe[iCurrT])) + log(1/10)
+posterior[iCurrT, iGRate]
+summary(as.vector(posterior))
+getTotNe(currTotNe = 3.0, #
+						rate = -2.5,#
+							midpt = midpt)
+totNe = getTotNe(currTotNe = 3.0,
+calculateLogP(m = m, alpha = alpha, totNe = totNe, subNe = subNe)+log(dexp(currTotNe[iCurrT]))
+)
+totNe = getTotNe(currTotNe = 3.0, #
+						rate = -2.5,#
+							midpt = midpt)
+calculateLogP(m = m, alpha = alpha, totNe = totNe, subNe = subNe)
+propNe
+logitIntcpt = 3.5#
+logitSlope = -6#
+#
+propNe = getPropNe(logitIntcpt = logitIntcpt, #
+						logitSlope = logitSlope,#
+						midpt = midpt)
+propNe
+subNe = propNe*totNe
+calculateLogP(m = m, alpha = alpha, totNe = totNe, subNe = subNe)
+calculateLogP = function(m = NULL, alpha = NULL, subNe = NULL){#
+#############################################################
+## interval 1#
+#############################################################
+tau1 = 0.1#
+etm1 = expm(tau1*m)#
+subNe1 = subNe[1,]#
+#
+p.l1.0 = c(1,0)#
+p.l2.0 = c(1,0)#
+p.l1.1m = p.l1.0%*%etm1#
+p.l2.1m = p.l2.0%*%etm1#
+#
+p.0 = rbind(p.l1.0, p.l2.0)#
+p.1m = rbind(p.l1.1m, p.l2.1m)#
+#
+intProbSum0 = getIntProbSum(p.0, subNe1)#
+logL11 = -tau1/2*intProbSum0 #
+#
+intProbSum1m = getIntProbSum(p.1m, subNe1)#
+logL12 = -tau1/2*intProbSum1m#
+#
+logL1 = logL11 + logL12#
+#############################################################
+#
+#############################################################
+## interval 2#
+#############################################################
+tau2 = 0.2#
+etm2 = expm(tau2*m)#
+subNe2 = subNe[2,]#
+#
+p.l1.1 = p.l1.1m#
+p.l2.1 = p.l2.1m#
+p.l3.1 = c(0,1)#
+p.l4.1 = c(0,1)#
+#
+p.l1.2m = p.l1.1%*%etm2#
+p.l2.2m = p.l2.1%*%etm2#
+p.l3.2m = p.l3.1%*%etm2#
+p.l4.2m = p.l4.1%*%etm2#
+#
+p.1 = rbind(p.l1.1, p.l2.1, p.l3.1, p.l4.1)#
+p.2m = rbind(p.l1.2m, p.l2.2m, p.l3.2m, p.l4.2m)#
+#
+intProbSum1 = getIntProbSum(p.1, subNe2)#
+logL21 = -tau2/2*intProbSum1 #
+#
+intProbSum2m = getIntProbSum(p.2m, subNe2)#
+logL22 = -tau2/2*intProbSum2m#
+coalRate2 = log(coalEvent(p.l3.2m, p.l4.2m, subNe2))#
+#
+logL2 = logL21 + logL22 + coalRate2#
+#############################################################
+## interval 3#
+#############################################################
+tau3 = 0.2#
+etm3 = expm(tau3*m)#
+subNe3 = subNe[3,]#
+#
+p.l1.2 = p.l1.2m#
+p.l2.2 = p.l1.2m#
+p.l5.2 = getAncLinProb(p.l3.2m, p.l4.2m, subNe3) #
+#
+p.l1.3m = p.l1.2%*%etm3#
+p.l2.3m = p.l2.2%*%etm3#
+p.l5.3m = p.l5.2%*%etm3#
+#
+p.2 = rbind(p.l1.2, p.l2.2, p.l5.2)#
+p.3m = rbind(p.l1.3m, p.l2.3m, p.l5.3m)#
+#
+intProbSum2 = getIntProbSum(p.2, subNe3)#
+logL31 = -tau3/2*intProbSum2#
+#
+intProbSum3m = getIntProbSum(p.3m, subNe3)#
+logL32 = -tau3/2*intProbSum3m#
+coalRate3 = log(coalEvent(p.l5.3m, p.l1.3m, subNe3))#
+#
+logL3 = logL31 + logL32 + coalRate3#
+#############################################################
+## interval 4#
+#############################################################
+tau4 = 0.05#
+etm4 = expm(tau4*m)#
+subNe4 = subNe[4,]#
+#
+p.l2.3 = p.l2.3m#
+p.l6.3 = getAncLinProb(p.l5.3m, p.l1.3m, subNe4)#
+#
+p.l2.4m = p.l2.3%*%etm4#
+p.l6.4m = p.l6.3%*%etm4#
+#
+p.3 = rbind(p.l2.3, p.l6.3)#
+p.4m = rbind(p.l2.4m, p.l6.4m)#
+#
+intProbSum3 = getIntProbSum(p.3, subNe4)#
+logL41 = -tau4/2*intProbSum3#
+#
+intProbSum4m = getIntProbSum(p.4m, subNe4)#
+logL42 = -tau4/2*intProbSum4m#
+#
+logL4 = logL41 + logL42#
+#############################################################
+## interval 5#
+#############################################################
+tau5 = 0.05#
+etm5 = expm(tau5*m)#
+subNe5 = subNe[5,]#
+#
+p.l2.4 = p.l2.4m#
+p.l6.4 = p.l6.4m#
+p.l7.4 = c(1,0)#
+#
+p.l2.5m = p.l2.4%*%etm5#
+p.l6.5m = p.l6.4%*%etm5#
+p.l7.5m = p.l7.4%*%etm5#
+#
+p.4 = rbind(p.l2.4, p.l6.4, p.l7.4)#
+p.5m = rbind(p.l2.5m, p.l6.5m, p.l7.5m)#
+intProbSum4 = getIntProbSum(p.4, subNe5)#
+logL51 = -tau5/2*intProbSum4#
+#
+intProbSum5m = getIntProbSum(p.5m, subNe5)#
+logL52 = -tau5/2*intProbSum5m#
+coalRate5 = log(coalEvent(p.l2.5m, p.l7.5m, subNe5))#
+#
+logL5 = logL51 + logL52 + coalRate5#
+#############################################################
+## interval 6#
+#############################################################
+tau6 = 0.1#
+etm6 = expm(tau6*m)#
+subNe6 = subNe[6,]#
+#
+p.l6.5 = p.l6.5m#
+p.l8.5 = getAncLinProb(p.l2.5m, p.l7.5m, subNe6)#
+#
+p.l6.6m = p.l6.5%*%etm6#
+p.l8.6m = p.l8.5%*%etm6#
+p.5 = rbind(p.l6.5, p.l8.5)#
+p.6m = rbind(p.l6.6m, p.l8.6m)#
+#
+intProbSum5 = getIntProbSum(p.5, subNe6)#
+logL61 = -tau6/2*intProbSum5#
+#
+intProbSum6m = getIntProbSum(p.6m, subNe6)#
+logL62 = -tau6/2*intProbSum6m#
+coalRate6 = log(coalEvent(p.l6.6m, p.l8.6m, subNe6))#
+#
+logL6 = logL61 + logL62 + coalRate6#
+#
+#############################################################
+logL = logL1 + logL2 + logL3 + logL4 + logL5 + logL6#
+return(logL)#
+}
+m = initialiseMigrationMatrix(rate1 = 1, rate2 = 0.7)#
+alpha = c(0,0.1,0.3,0.5,0.55,0.6,0.7)#
+midpt = c(0.05,0.2,0.4,0.525,0.575,0.65)#
+#
+logitIntcpt = 3.5#
+logitSlope = -6#
+#
+propNe = getPropNe(logitIntcpt = logitIntcpt, #
+						logitSlope = logitSlope,#
+						midpt = midpt)#
+currTotNe = c(1:100)/10 - 1/20#
+gRate = c(-50:50)/10#
+#
+posterior = matrix(nrow=length(currTotNe), ncol = length(gRate))#
+#
+for(iCurrT in 1:length(currTotNe)){#
+	for(iGRate in 1:length(gRate)){#
+		totNe = getTotNe(currTotNe = currTotNe[iCurrT], rate = gRate[iGRate],#
+							midpt = midpt)#
+		subNe = propNe*totNe#
+		posterior[iCurrT, iGRate] = calculateLogP(m = m, alpha = alpha, subNe = subNe)+log(dexp(currTotNe[iCurrT])) + log(1/10)#
+	}#
+	message(paste0("Completed: ", iCurrT, ".", sep=""))#
+}
+currTotNePost = rowSums(exp(posterior))/sum(rowSums(exp(posterior)))
+sum(currTotNePost*currTotNe)
+currTotNeSample = sample(currTotNe, 1000000, replace = T, prob = currTotNePost)
+mean(logitIntcptSample)
+mean(currTotNeSample)
+var(logitIntcptSample)
+var(currTotNeSample)
+hist(currTotNeSample, nclass=50)
+gRatePost = colSums(exp(posterior))/sum(colSums(exp(posterior)))
+sum(gRatePost*gRate)
+gRateSample = sample(gRate, 1000000, replace = T, prob = gRatePost)
+var(gRateSample)
+mean(gRateSample)
+hist(gRateSample, nclass=50)
+log.df = read.table(file="/Users/jessiewu/Documents/research/phylogeography/log/testPosterior0.2.log",header=T)
+hist(log.df$initVal, nclass=100, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(currTotNeSample, nclass=100, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+hist(log.df$growthRate, nclass=50, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(gRateSample, nclass=50, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+dev.new()
+plot(gRatePost,type="l")
+hist(gRateSample, nclass=500, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+hist(log.df$growthRate, nclass=10, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(log.df$growthRate, nclass=100, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(gRateSample, nclass=100, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+dev.new()
+plot(gRatePost,type="l")
+hist(gRateSample, nclass=100, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+plot(x=gRateSample, gRatePost,type="l")
+plot(x=gRate, gRatePost,type="l")
+hist(gRateSample, nclass=100, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+hist(gRateSample, nclass=10, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+hist(log.df$growthRate, nclass=100, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(gRateSample, nclass=10, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+lines(x=gRate, gRatePost,type="l")
+lines(x=gRate, gRatePost*10,type="l")
+hist(log.df$growthRate, nclass=100, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(gRateSample, nclass=10, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+hist(log.df$growthRate, nclass=100, prob=T, col=rgb(1,0,0,0.3), border=NA)
+hist(gRateSample, nclass=100, prob=T, col=rgb(0,0,1,0.3), border=NA, add=T)
+lines(x=gRate, gRatePost*10,type="l")
+length(gRateSample)
+length(gRatePost)
+chooseCRANmirror()
+library(dirmult)
+?rdirichlet
+length(posterior)
+qs = rdirichlet(10000,alpha = c(1,1,1,1))
+qs[1,]
+q
+quantile
+summary(qs[,1])
+summary(qs[,1]*10)
+which(qs[,1]*10 > 0 &  qs[,1]*10 < 0.1)
+qs[,1][which(qs[,1]*10 > 0 &  qs[,1]*10 < 0.1)]
+summary(qs[,1][which(qs[,1]*10 > 0 &  qs[,1]*10 < 0.1)])
+library(dirmult)#
+library(expm)#
+#
+getIntProbSum = function(probs = NULL, theta = NULL){#
+	lineageCount = nrow(probs)#
+	locCount = ncol(probs)#
+	probSum = 0 #
+	for(iLoc in 1:locCount){#
+		for(iLin1 in 1:lineageCount){#
+			for(iLin2 in 1:lineageCount){#
+				if(iLin1 != iLin2){#
+					probSum = probSum + probs[iLin1,iLoc]*probs[iLin2,iLoc]/theta[iLoc]#
+				}#
+			}#
+		}#
+	}#
+	return(probSum)	#
+}#
+#
+coalEvent=function(lin1Probs = NULL, lin2Probs = NULL, theta = NULL){#
+	locCount = length(theta)#
+	coalProb = 0#
+	for(iLoc in 1:locCount){#
+		coalProb = coalProb + lin1Probs[iLoc]*lin2Probs[iLoc]/theta[iLoc]#
+	}#
+	return(coalProb)#
+}#
+#
+getAncLinProb = function(lin1Probs = NULL, lin2Probs = NULL, theta = NULL){#
+	length1 = length(lin1Probs)#
+	length2 = length(lin2Probs)#
+	if(length1 != length2){#
+		message(paste0("lin1Probs length: ", length1))#
+		message(paste0("lin2Probs length: ", length2))#
+		stop("The lengths of the two probability vectors must be the same!")#
+	}#
+	ancLinProbs = vector(length = length1)	#
+	for(iLoc in 1:length1){#
+		ancLinProbs[iLoc] = lin1Probs[iLoc]*lin2Probs[iLoc]/theta[iLoc]#
+	}#
+	ancLinProbs = ancLinProbs/sum(ancLinProbs)#
+	return(ancLinProbs)#
+}#
+#
+calculateLogP = function(m = NULL, alpha = NULL, subNe = NULL){#
+#############################################################
+## interval 1#
+#############################################################
+tau1 = 0.1#
+etm1 = expm(tau1*m)#
+subNe1 = subNe[1,]#
+#
+p.l1.0 = c(1,0)#
+p.l2.0 = c(1,0)#
+p.l1.1m = p.l1.0%*%etm1#
+p.l2.1m = p.l2.0%*%etm1#
+#
+p.0 = rbind(p.l1.0, p.l2.0)#
+p.1m = rbind(p.l1.1m, p.l2.1m)#
+#
+intProbSum0 = getIntProbSum(p.0, subNe1)#
+logL11 = -tau1/2*intProbSum0 #
+#
+intProbSum1m = getIntProbSum(p.1m, subNe1)#
+logL12 = -tau1/2*intProbSum1m#
+#
+logL1 = logL11 + logL12#
+#############################################################
+#
+#############################################################
+## interval 2#
+#############################################################
+tau2 = 0.2#
+etm2 = expm(tau2*m)#
+subNe2 = subNe[2,]#
+#
+p.l1.1 = p.l1.1m#
+p.l2.1 = p.l2.1m#
+p.l3.1 = c(0,1)#
+p.l4.1 = c(0,1)#
+#
+p.l1.2m = p.l1.1%*%etm2#
+p.l2.2m = p.l2.1%*%etm2#
+p.l3.2m = p.l3.1%*%etm2#
+p.l4.2m = p.l4.1%*%etm2#
+#
+p.1 = rbind(p.l1.1, p.l2.1, p.l3.1, p.l4.1)#
+p.2m = rbind(p.l1.2m, p.l2.2m, p.l3.2m, p.l4.2m)#
+#
+intProbSum1 = getIntProbSum(p.1, subNe2)#
+logL21 = -tau2/2*intProbSum1 #
+#
+intProbSum2m = getIntProbSum(p.2m, subNe2)#
+logL22 = -tau2/2*intProbSum2m#
+coalRate2 = log(coalEvent(p.l3.2m, p.l4.2m, subNe2))#
+#
+logL2 = logL21 + logL22 + coalRate2#
+#############################################################
+## interval 3#
+#############################################################
+tau3 = 0.2#
+etm3 = expm(tau3*m)#
+subNe3 = subNe[3,]#
+#
+p.l1.2 = p.l1.2m#
+p.l2.2 = p.l1.2m#
+p.l5.2 = getAncLinProb(p.l3.2m, p.l4.2m, subNe3) #
+#
+p.l1.3m = p.l1.2%*%etm3#
+p.l2.3m = p.l2.2%*%etm3#
+p.l5.3m = p.l5.2%*%etm3#
+#
+p.2 = rbind(p.l1.2, p.l2.2, p.l5.2)#
+p.3m = rbind(p.l1.3m, p.l2.3m, p.l5.3m)#
+#
+intProbSum2 = getIntProbSum(p.2, subNe3)#
+logL31 = -tau3/2*intProbSum2#
+#
+intProbSum3m = getIntProbSum(p.3m, subNe3)#
+logL32 = -tau3/2*intProbSum3m#
+coalRate3 = log(coalEvent(p.l5.3m, p.l1.3m, subNe3))#
+#
+logL3 = logL31 + logL32 + coalRate3#
+#############################################################
+## interval 4#
+#############################################################
+tau4 = 0.05#
+etm4 = expm(tau4*m)#
+subNe4 = subNe[4,]#
+#
+p.l2.3 = p.l2.3m#
+p.l6.3 = getAncLinProb(p.l5.3m, p.l1.3m, subNe4)#
+#
+p.l2.4m = p.l2.3%*%etm4#
+p.l6.4m = p.l6.3%*%etm4#
+#
+p.3 = rbind(p.l2.3, p.l6.3)#
+p.4m = rbind(p.l2.4m, p.l6.4m)#
+#
+intProbSum3 = getIntProbSum(p.3, subNe4)#
+logL41 = -tau4/2*intProbSum3#
+#
+intProbSum4m = getIntProbSum(p.4m, subNe4)#
+logL42 = -tau4/2*intProbSum4m#
+#
+logL4 = logL41 + logL42#
+#############################################################
+## interval 5#
+#############################################################
+tau5 = 0.05#
+etm5 = expm(tau5*m)#
+subNe5 = subNe[5,]#
+#
+p.l2.4 = p.l2.4m#
+p.l6.4 = p.l6.4m#
+p.l7.4 = c(1,0)#
+#
+p.l2.5m = p.l2.4%*%etm5#
+p.l6.5m = p.l6.4%*%etm5#
+p.l7.5m = p.l7.4%*%etm5#
+#
+p.4 = rbind(p.l2.4, p.l6.4, p.l7.4)#
+p.5m = rbind(p.l2.5m, p.l6.5m, p.l7.5m)#
+intProbSum4 = getIntProbSum(p.4, subNe5)#
+logL51 = -tau5/2*intProbSum4#
+#
+intProbSum5m = getIntProbSum(p.5m, subNe5)#
+logL52 = -tau5/2*intProbSum5m#
+coalRate5 = log(coalEvent(p.l2.5m, p.l7.5m, subNe5))#
+#
+logL5 = logL51 + logL52 + coalRate5#
+#############################################################
+## interval 6#
+#############################################################
+tau6 = 0.1#
+etm6 = expm(tau6*m)#
+subNe6 = subNe[6,]#
+#
+p.l6.5 = p.l6.5m#
+p.l8.5 = getAncLinProb(p.l2.5m, p.l7.5m, subNe6)#
+#
+p.l6.6m = p.l6.5%*%etm6#
+p.l8.6m = p.l8.5%*%etm6#
+p.5 = rbind(p.l6.5, p.l8.5)#
+p.6m = rbind(p.l6.6m, p.l8.6m)#
+#
+intProbSum5 = getIntProbSum(p.5, subNe6)#
+logL61 = -tau6/2*intProbSum5#
+#
+intProbSum6m = getIntProbSum(p.6m, subNe6)#
+logL62 = -tau6/2*intProbSum6m#
+coalRate6 = log(coalEvent(p.l6.6m, p.l8.6m, subNe6))#
+#
+logL6 = logL61 + logL62 + coalRate6#
+#
+#############################################################
+logL = logL1 + logL2 + logL3 + logL4 + logL5 + logL6#
+return(logL)#
+}#
+#
+initialiseMigrationMatrix = function(rate1 = NULL, rate2 = NULL2){#
+	m = matrix(c(-rate1, rate1, rate2,-rate2), nrow = 2, byrow=T)#
+	return(m)#
+}#
+#
+getTotNe = function(currTotNe = NULL, rate = NULL, midpt = NULL){#
+	totNe = currTotNe*exp(midpt*rate)#
+	return(totNe)#
+}#
+#
+getPropNe = function(logitIntcpt = NULL, logitSlope = NULL, midpt = NULL){#
+	propNe1 = 1/(1+exp(-(logitIntcpt+logitSlope*midpt)))#
+	propNe = cbind(propNe1,1 - propNe1)#
+	return(propNe)#
+}#
+getMigRate = function(quant = NULL){#
+	return(quant*10)#
+}#
+#
+getLogitIntcpt = function(quant = NULL){#
+	intcpt = -5+10*quant#
+	return(intcpt)#
+}#
+#
+getLogitSlope = function(quant = NULL){#
+	slope = -10+20*quant#
+	return(slope)#
+}#
+#
+getCurrTot = function(quant = NULL){#
+	currTot = quant*10#
+	return(currTot)#
+}#
+#
+getGRate = function(quant = NULL){#
+	gRate = -5+10*quant#
+	return(gRate)#
+}#
+#
+getParamVals = function(quants = NULL){#
+	paramVals = vector(length = length(quants))#
+	names(paramVals) = names(quants)#
+	paramVals['migRate1'] = getMigRate(quants['migRate1'])#
+	paramVals['migRate2'] = getMigRate(quants['migRate2'])#
+	paramVals['logitIntcpt'] = getLogitIntcpt(quants['logitIntcpt'])#
+	paramVals['logitSlope'] = getLogitSlope(quants['logitSlope'])#
+	paramVals['currTot'] = getCurrTot(quants['currTot'])#
+	paramVals['gRate'] = getGRate(quants['gRate'])#
+	return(paramVals)#
+}#
+#
+initialiseMigrationMatrix = function(rate1 = NULL, rate2 = NULL2){#
+	m = matrix(c(-rate1, rate1, rate2,-rate2), nrow = 2, byrow=T)#
+	return(m)#
+}#
+#
+getTotNe = function(currTotNe = NULL, rate = NULL, midpt = NULL){#
+	totNe = currTotNe*exp(midpt*rate)#
+	return(totNe)#
+}#
+#
+getPropNe = function(logitIntcpt = NULL, logitSlope = NULL, midpt = NULL){#
+	propNe1 = 1/(1+exp(-(logitIntcpt+logitSlope*midpt)))#
+	propNe = cbind(propNe1,1 - propNe1)#
+	return(propNe)#
+}#
+#
+getLogMigRatePrior = function(rate = NULL){#
+	logPrior = log(dexp(rate))#
+	return(logPrior)#
+}#
+#
+getLogLogitIntcptPrior = function(){#
+	logPrior = log(1/10)#
+	return(logPrior)#
+}#
+#
+getLogLogitSlopePrior = function(){#
+	logPrior = log(1/20)#
+	return(logPrior)#
+}#
+#
+getLogCurrTot = function(currTot = NULL){#
+	logPrior = log(dexp(currTot))#
+	return(logPrior)#
+}#
+#
+getLogGRate = function(){#
+	logPrior = log(1/10)#
+	return(logPrior)#
+}#
+#
+getPosterior = function(migRate1 = NULL,#
+						migRate2 = NULL,#
+						logitIntcpt = NULL,#
+						logitSlope = NULL,#
+						currTotNe = NULL,#
+						gRate = NULL){#
+	m = initialiseMigrationMatrix(rate1 = migRate1, rate2 = migRate2)#
+	propNe = getPropNe(logitIntcpt = logitIntcpt, logitSlope = logitSlope, #
+						midpt = midpt)#
+	totNe = getTotNe(currTotNe = currTotNe, rate = gRate, midpt = midpt)#
+	subNe = propNe*totNe#
+	logL = calculateLogP(m = m, alpha = alpha, subNe = subNe) #
+	logPrior = getLogMigRatePrior(migRate1) +  getLogMigRatePrior(migRate2) +#
+	getLogLogitIntcptPrior() + getLogLogitSlopePrior() +#
+	getLogCurrTot(currTotNe) + getLogGRate()#
+	logPost = logL + logPrior#
+	return(logPost)#
+}#
+alpha = c(0,0.1,0.3,0.5,0.55,0.6,0.7)#
+midpt = c(0.05,0.2,0.4,0.525,0.575,0.65)#
+qs = cbind(runif(10000), runif(10000), runif(10000), runif(10000), runif(10000), runif(10000))#
+#
+colnames(qs) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')#
+#
+paramValsMat = apply(qs,1, getParamVals); paramValsMat = t(paramValsMat)#
+#
+posterior = vector(length = nrow(paramValsMat))#
+#
+for(i in 1:nrow(paramValsMat)){#
+	migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)#
+	if(i%%1000 == 0){#
+		message(paste0("Completed ", i, "."))#
+	}#
+}
+qMigRate1 = rep(1:10,1000)/10#
+qMigRate2 = rep(rep(1:10,rep(10,10)),100)/10#
+qLogitIntcpt = rep(rep(1:10,rep(100,10)),10)/10#
+qLogitSlope = rep(1:10,1000)/10#
+#
+migRate1 = getMigRate(qMigRate1)#
+migRate2 = getMigRate(qMigRate2)#
+logitIntcpt = getLogitIntcpt(qLogitIntcpt)#
+logitSlope = getLogitSlope(qLogitSlope)#
+#
+paramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))
+posterior = vector(length = nrow(paramValsMat))
+i=1
+migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)
+colnames(paramValsMat) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')
+posterior = vector(length = nrow(paramValsMat))
+migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']
+posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)
+posterior[i]
+posterior = vector(length = nrow(paramValsMat))#
+#
+for(i in 1:nrow(paramValsMat)){#
+	migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)#
+	if(i%%1000 == 0){#
+		message(paste0("Completed ", i, "."))#
+	}#
+}
+posterior = exp(posterior)
+sampleIndex = sample(1:nrow(paramValsMat), 100000, replace=T, posterior)
+hist(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate1'])
+hist(paramValsMat[sampleIndex,'migRate2'])
+mean(paramValsMat[sampleIndex,'migRate2'])
+hist(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitIntcpt'])
+migRate1[1:10]
+qMigRate1 = rep(1:10,1000)/10 - 0.5
+qMigRate1 = rep(1:10,1000)/10 - 0.05
+qMigRate2 = rep(rep(1:10,rep(10,10)),100)/10 - 0.05
+migRate1 = getMigRate(qMigRate1)
+migRate1p[1:10]
+migRate1[1:10]
+migRate1 = qexp(qMigRate1)
+migRate1[1:10]
+migRate1 = qexp(qMigRate1)#
+migRate2 = qexp(qMigRate2)#
+logitIntcpt = getLogitIntcpt(qLogitIntcpt)#
+logitSlope = getLogitSlope(qLogitSlope)
+paramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))
+colnames(paramValsMat) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')
+i = 1
+migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)
+posterior[i]
+for(i in 1:nrow(paramValsMat)){#
+	migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)#
+	if(i%%1000 == 0){#
+		message(paste0("Completed ", i, "."))#
+	}#
+}#
+#
+posterior = exp(posterior)
+sampleIndex = sample(1:nrow(paramValsMat), 100000, replace=T, posterior)
+hist(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate1'])
+hist(paramValsMat[sampleIndex,'migRate2'])
+mean(paramValsMat[sampleIndex,'migRate2'])
+hist(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitIntcpt'])
+probs = exp(posterior)/sum(exp(posterior))
+sum(probs)
+sampleIndex = sample(1:nrow(paramValsMat), 100000, replace=T, probs)
+hist(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate2'])
+mean(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitSlope'])
+hist(paramValsMat[sampleIndex,'logitIntcpt'])
+summary(probs)
+summary(posterior)
+summary( exp(posterior))
+which.max(postioer)
+which.max(posterior)
+max(posterior)
+exp(max(posterior))
+calculateLogP(m = m, alpha = alpha, subNe = subNe)
+gRate = NULL){#
+	m = initialiseMigrationMatrix(rate1 = migRate1, rate2 = migRate2)#
+	propNe = getPropNe(logitIntcpt = logitIntcpt, logitSlope = logitSlope, #
+						midpt = midpt)#
+	totNe = getTotNe(currTotNe = currTotNe, rate = gRate, midpt = midpt)#
+	subNe = propNe*totNe
+calculateLogP(m = m, alpha = alpha, subNe = subNe)
+migRate1 = 1#
+migRate2 = 0.7#
+logitIntcpt = 3.5#
+logitSlope = -6#
+currTotNe = 3#
+gRate = -2.5
+m = initialiseMigrationMatrix(rate1 = migRate1, rate2 = migRate2)#
+	propNe = getPropNe(logitIntcpt = logitIntcpt, logitSlope = logitSlope, #
+						midpt = midpt)#
+	totNe = getTotNe(currTotNe = currTotNe, rate = gRate, midpt = midpt)#
+	subNe = propNe*totNe
+subNe
+logL = calculateLogP(m = m, alpha = alpha, subNe = subNe)
+logL
+i
+paramValsMat[722,]
+summary(logitIntcpt)
+paramValsMat[1,]
+paramValsMat[1:10,]
+paramValsMat[logitIntcpt==3&logitSlope==-6,]
+paramValsMat[paramValsMat[,'logitIntcpt']==3&[paramValsMat[,'logitSlope']==-6,]
+paramValsMat[paramValsMat[,'logitIntcpt']==3 & paramValsMat[,'logitSlope']==-6,]
+qMigRate1[1:100]
+qMigRate1 = rep(1:10,1000)/10 - 0.05#
+qMigRate2 = rep(rep(1:10,rep(10,10)),100)/10 - 0.05#
+qLogitIntcpt = rep(rep(1:10,rep(100,10)),10)/10#
+qLogitSlope = rep(1:10,1000)/10#
+#
+migRate1 = qexp(qMigRate1)#
+migRate2 = qexp(qMigRate2)#
+logitIntcpt = getLogitIntcpt(qLogitIntcpt)#
+logitSlope = getLogitSlope(qLogitSlope)#
+#
+paramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))#
+#
+colnames(paramValsMat) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')
+paramValsMat[paramValsMat[,'logitIntcpt']==3 & paramValsMat[,'logitSlope']==-6,]
+qMigRate1[1:200]
+qMigRate2[:200]
+qMigRate2[1:200]
+qLogitIntcpt[1:200]
+paramValsMat[,'logitIntcpt']==3 & paramValsMat[,'logitSlope']==-6
+which(paramValsMat[,'logitIntcpt']==3 & paramValsMat[,'logitSlope']==-6)
+which(paramValsMat[,'logitSlope']==-6)
+which(logitSlope==-6)
+logitSlope[1:200]
+qLogitSlope [1:200]
+qMigRate1 = rep(1:10,1000)/10 - 0.05#
+qMigRate2 = rep(rep(1:10,rep(10,10)),100)/10 - 0.05#
+qLogitIntcpt = rep(rep(1:10,rep(100,10)),10)/10#
+qLogitSlope = rep(1:10,rep(1000,10))/10#
+#
+migRate1 = qexp(qMigRate1)#
+migRate2 = qexp(qMigRate2)#
+logitIntcpt = getLogitIntcpt(qLogitIntcpt)
+logitSlope = getLogitSlope(qLogitSlope)
+paramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))#
+#
+colnames(paramValsMat) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')
+posterior = vector(length = nrow(paramValsMat))
+for(i in 1:nrow(paramValsMat)){#
+	migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)#
+	if(i%%1000 == 0){#
+		message(paste0("Completed ", i, "."))#
+	}#
+}
+probs = exp(posterior)/sum(exp(posterior))
+sampleIndex = sample(1:nrow(paramValsMat), 100000, replace=T, probs)
+hist(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate1'])
+hist(paramValsMat[sampleIndex,'migRate2'])
+mean(paramValsMat[sampleIndex,'migRate2'])
+hist(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitSlope'])
+summary(probs)
+sum(probs)
+hist(paramValsMat[sampleIndex,'migRate1'])
+hist(paramValsMat[sampleIndex,'migRate2'])
+length(unique(paramValsMat[sampleIndex,'migRate1']))
+logitIntcpt = runif(10000)*10-5
+logitSlope = runif(10000)*20-10
+migRate1 = rexp(10000)
+migRate2 = rexp(10000)
+summary(logitSlope)
+aramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))
+paramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))#
+#
+colnames(paramValsMat) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')
+posterior = vector(length = nrow(paramValsMat))
+for(i in 1:nrow(paramValsMat)){#
+	migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)#
+	if(i%%1000 == 0){#
+		message(paste0("Completed ", i, "."))#
+	}#
+}
+summary(exp(posterior))
+summary((posterior))
+probs = exp(posterior)/sum(exp(posterior))
+sampleIndex = sample(1:nrow(paramValsMat), 100000, replace=T, probs)
+hist(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate2'])
+mean(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitSlope'])
+migRate1 = runif(10000)*10
+migRate2 = runif(10000)*10
+aramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))
+paramValsMat = cbind(migRate1, migRate2, logitIntcpt, logitSlope, rep(3,10000), rep(-2.5, 10000))#
+#
+colnames(paramValsMat) = c('migRate1', 'migRate2', 'logitIntcpt', 'logitSlope', 'currTot', 'gRate')#
+#
+posterior = vector(length = nrow(paramValsMat))#
+#
+for(i in 1:nrow(paramValsMat)){#
+	migRate1 = paramValsMat[i,'migRate1']#
+	migRate2 = paramValsMat[i,'migRate2']#
+	logitIntcpt = paramValsMat[i,'logitIntcpt']#
+	logitSlope = paramValsMat[i,'logitSlope']#
+	currTotNe = paramValsMat[i,'currTot']#
+	gRate = paramValsMat[i,'gRate']#
+	posterior[i] = getPosterior(migRate1 = migRate1, migRate2 = migRate2,#
+						logitIntcpt = logitIntcpt, logitSlope = logitSlope,#
+						currTotNe = currTotNe, gRate = gRate)#
+	if(i%%1000 == 0){#
+		message(paste0("Completed ", i, "."))#
+	}#
+}
+probs = exp(posterior)/sum(exp(posterior))
+sampleIndex = sample(1:nrow(paramValsMat), 100000, replace=T, probs)
+hist(paramValsMat[sampleIndex,'migRate1'])
+mean(paramValsMat[sampleIndex,'migRate1'])
+sum(probs)
+mean(paramValsMat[sampleIndex,'migRate1'])
+hist(paramValsMat[sampleIndex,'migRate2'])
+mean(paramValsMat[sampleIndex,'migRate2'])
+hist(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitIntcpt'])
+mean(paramValsMat[sampleIndex,'logitSlope'])
+1/(1+exp(4))
+chooseCRANmirror()
+load("/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/test/testFuc.RData")
+library("/Users/jessiewu/Documents/research/gwas/rpackage/cats")
+setwd(/Users/jessiewu/Documents/research/gwas/rpackage/)
+setwd(/Users/jessiewu/Documents/research/gwas/rpackage/"")
+setwd(""/Users/jessiewu/Documents/research/gwas/rpackage/")
+library(devtools)#
+library(roxygen2)
+build(pkg = "/Users/jessiewu/Documents/research/gwas/rpackage/cats", path = "/Users/jessiewu/Documents/research/gwas/rpackage/",  binary = FALSE, vignettes = TRUE, manual = FALSE, args = NULL, quiet = FALSE)
+build(pkg = "/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/bugwas/", path = "/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/",  binary = FALSE, vignettes = TRUE, manual = FALSE, args = NULL, quiet = FALSE)
+setwd("/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/")
+setwd("./bugwas")
+document()
+setwd("..")
+build(pkg = "/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/bugwas/", path = "/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/",  binary = FALSE, vignettes = TRUE, manual = FALSE, args = NULL, quiet = FALSE)
+library("bugwas")
+setwd("/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/")
+setwd("./bugwas")
+document()
+build(pkg = "/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/bugwas/", path = "/Users/jessiewu/Documents/research/gwas/svn/gwas_methods/bugwas/rpackage/",  binary = FALSE, vignettes = TRUE, manual = FALSE, args = NULL, quiet = FALSE)
+library(bugwas)
+bugwas

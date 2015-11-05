@@ -7,15 +7,17 @@
 pcLoadingPlot(config, biallelic)
 }
 \arguments{
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 }
 \description{
 This function plots the loadings of all SNPs for each significant principle component identified by the Bayesian Wald test.
 }
 \examples{
-pcLoadingPlot(config = config, biallelic = biallelic)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+pcLoadingPlot(config = data$config, biallelic = data$biallelic)
 }
-\keyword{plot}
+\keyword{Scatter-plot}
 

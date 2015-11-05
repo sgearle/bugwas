@@ -4,3 +4,26 @@ lin_loc
 library(bugwas)
 lin_loc
 ?lin_loc
+strsplit
+create.dir
+dir.create
+?unlink
+sortDskPath="/home/wilson/C++/read_dsk/sort_dsk"#
+final.kmer31.total.txt = "/home/wu/gwas/github/test/kmerGWAS/testKmersFromFasta/kmersC00002649.kmer31.total.txt"#
+final.kmer31.txt.gz = "/home/wu/gwas/github/test/kmerGWAS/testKmersFromFasta/kmersC00002649.kmer31.txt.gz"#
+paste(c(sortDskPath, full_dodsk,"2>",final.kmer31.total.txt, "| gzip -c >", final.kmer31.txt.gz), collapse=" ")
+full_dodsk="C00002649_R00000022_gyrA.solid_kmers_binary"#
+sortDskPath="/home/wilson/C++/read_dsk/sort_dsk"#
+final.kmer31.total.txt = "/home/wu/gwas/github/test/kmerGWAS/testKmersFromFasta/kmersC00002649.kmer31.total.txt"#
+final.kmer31.txt.gz = "/home/wu/gwas/github/test/kmerGWAS/testKmersFromFasta/kmersC00002649.kmer31.txt.gz"#
+paste(c(sortDskPath, full_dodsk,"2>",final.kmer31.total.txt, "| gzip -c >", final.kmer31.txt.gz), collapse=" ")
+message("hi","there")
+?strsplit
+unlink(c("a","b"))
+touppercase
+uppervas
+uppercase
+toupper
+"a" =c("a", "b")
+"a" ==c("a", "b")
+?any

@@ -74,8 +74,15 @@ snpManhattanPlot = function(biallelic, triallelic, config, colourPalette = NULL)
   
  
   
-  
-  snpType = c(rep(1,nrow(fit.lmm)),rep(2,nrow(fit.lmm.tritetra)))
+  bipCount = 0
+  ttpCount = 0
+  if(!is.null(fit.lmm)){
+  	bipCount = nrow(fit.lmm)
+  }
+  if(!is.null(fit.lmm.tritetra)){
+  	ttpCount = nrow(fit.lmm.tritetra)
+  }
+  snpType = c(rep(1,bipCount),rep(2,ttpCount))
   
   ## If available, plot logistic regression P-values on a Manhattan plot.
   logregPvalues = NULL

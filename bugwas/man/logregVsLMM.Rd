@@ -7,11 +7,11 @@
 logregVsLMM(config, biallelic, triallelic, colourPalette = NULL)
 }
 \arguments{
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 
-\item{triallelic}{A list called 'triallelic' created from the bugwas function. It is a required input.}
+\item{triallelic}{A list called 'triallelic' created from the lin_loc function. It is a required input.}
 
 \item{colourPalette}{A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.}
 }
@@ -19,9 +19,11 @@ logregVsLMM(config, biallelic, triallelic, colourPalette = NULL)
 This function generates the plot of the P-values of logistic regression versus those of SNP GWAS.
 }
 \examples{
-logregVsLMM(biallelic = biallelic, triallelic = triallelic, config = config)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+logregVsLMM(biallelic = data$biallelic, triallelic = data$triallelic, config = data$config)
 }
+\keyword{P-values}
 \keyword{SNP}
-\keyword{Scatter}
-\keyword{plot}
+\keyword{Scatter-plot}
 

@@ -54,7 +54,7 @@ snpPCManhattanPlot = function(config, biallelic, triallelic, colourPalette = NUL
 	
 	new.pat <- ipat.snps
 	new.pat <- sapply(new.pat, function(x, pat){ x + length(pat)}, pat = bippat)
-	new.pat <- c(ipat, new.pat)
+	new.pat <- c(ipat, unlist(new.pat))
 	
   
   .plot_pc_manhattan(o = biallelic$pc_order$pc_order, 

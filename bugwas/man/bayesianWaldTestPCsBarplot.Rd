@@ -8,11 +8,11 @@ bayesianWaldTestPCsBarplot(config, biallelic, treeInfo, colourPalette = NULL,
   p.genomewidepc = NULL)
 }
 \arguments{
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 
-\item{treeInfo}{A list called 'treeInfo' created from the bugwas function. It is a required input.}
+\item{treeInfo}{A list called 'treeInfo' created from the lin_loc function. It is a required input.}
 
 \item{colourPalette}{A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.}
 
@@ -22,7 +22,11 @@ bayesianWaldTestPCsBarplot(config, biallelic, treeInfo, colourPalette = NULL,
 This function generates the barplot of Bayesian Wald Test on principal components.
 }
 \examples{
-testGenomeWidePCs(config = config, biallelic = biallelic)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+testGenomeWidePCs(config = data$config, biallelic = data$biallelic)
 }
-\keyword{plot}
+\keyword{Barplot}
+\keyword{Bayesian-Wald-test}
+\keyword{PCA}
 

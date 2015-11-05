@@ -1239,7 +1239,7 @@ get_SNP_data <- function(gen = NULL,
 	XX.ID <- colnames(XX)
 	
 	# Read in sample IDs and phenotype
-	pheno <- read.table(pheno,header=T,sep="\t")
+	pheno <- read.table(pheno,header=T, as.is = T, sep="\t")
 	if(!any(colnames(pheno)=="ID")){
 		stop("\nError: phenotype file must have 'ID' column")
 	}

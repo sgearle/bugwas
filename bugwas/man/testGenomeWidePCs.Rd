@@ -11,15 +11,17 @@ testGenomeWidePCs(config = NULL, biallelic = NULL)
 
 \item{biallelic}{A list called 'biallelic' created from the bugwas function}
 }
+\value{
+The p-value of the Bayesian Wald test for the genome-wide effect of principal components.
+}
 \description{
 This function performs the genome-wide principal components.
 }
 \examples{
-testGenomeWidePCs(config, biallelic)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+testGenomeWidePCs(config = data$config, biallelic = data$biallelic)
 }
-\keyword{Bayesian}
-\keyword{Wald}
-\keyword{components}
-\keyword{principal}
-\keyword{test,}
+\keyword{Bayesian-Wald-test}
+\keyword{PCA}
 

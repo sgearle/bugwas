@@ -7,11 +7,11 @@
 snpPCManhattanPlot(config, biallelic, triallelic, colourPalette = NULL)
 }
 \arguments{
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 
-\item{triallelic}{A list called 'triallelic' created from the bugwas function. It is a required input.}
+\item{triallelic}{A list called 'triallelic' created from the lin_loc function. It is a required input.}
 
 \item{colourPalette}{A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.}
 
@@ -21,10 +21,12 @@ snpPCManhattanPlot(config, biallelic, triallelic, colourPalette = NULL)
 This function generates a Manhattan plot organised by the signficance of the principal components.
 }
 \examples{
-snpPCManhattanPlot(config = config, biallelic = biallelic,  triallelic =  triallelic)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+snpPCManhattanPlot(biallelic = data$biallelic,  triallelic = data$triallelic,
+ config = data$config)
 }
-\keyword{Manhattan}
+\keyword{Manhattan-plot}
 \keyword{PCA}
 \keyword{SNP}
-\keyword{plot}
 

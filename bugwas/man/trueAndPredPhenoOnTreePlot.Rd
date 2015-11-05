@@ -8,11 +8,11 @@ trueAndPredPhenoOnTreePlot(config, biallelic, treeInfo, p.genomewidepc = NULL,
   colourPalette = NULL)
 }
 \arguments{
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 
-\item{treeInfo}{A list called 'treeInfo' created from the bugwas function. It is a required input.}
+\item{treeInfo}{A list called 'treeInfo' created from the lin_loc function. It is a required input.}
 
 \item{p.genomewidepc}{A matrix of the significant principal component and their correlation with lineages. This is Bayesian Wald test results produced by the function testGenomeWidePCs. If this is NULL then testGenomeWidePCs is called to generate the required test results.}
 
@@ -22,7 +22,11 @@ trueAndPredPhenoOnTreePlot(config, biallelic, treeInfo, p.genomewidepc = NULL,
 This function that plots the true and predicted phenotypes on a tree.
 }
 \examples{
-trueAndPredPhenoOnTreePlot(config = config, biallelic = biallelic, treeInfo = treeInfo)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+trueAndPredPhenoOnTreePlot(biallelic = data$biallelic, treeInfo = data$treeInfo,
+ config = data$config)
 }
-\keyword{plot}
+\keyword{Phenotype}
+\keyword{Phylogram}
 

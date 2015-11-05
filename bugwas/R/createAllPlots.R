@@ -74,7 +74,16 @@ genVars = NULL, cutoffCor = NULL,  npcs = NULL, phenotype = NULL,
                            max.cor.pc.tritetra = max.cor.pc.tritetra,
                            cor.XX = cor.XX)
   
-  snpType = c(rep(1,nrow(fit.lmm)),rep(2,nrow(fit.lmm.tritetra)))
+  bipCount = 0
+  ttpCount = 0
+  if(!is.null(fit.lmm)){
+  	bipCount = nrow(fit.lmm)
+  }
+  if(!is.null(fit.lmm.tritetra)){
+  	ttpCount = nrow(fit.lmm.tritetra)
+  }
+  
+  snpType = c(rep(1,bipCount),rep(2,ttpCount))
   
   #The Manhattan plot for SNP GWAS using logistic regerssion
   logregPvalues = NULL
@@ -154,7 +163,7 @@ genVars = NULL, cutoffCor = NULL,  npcs = NULL, phenotype = NULL,
   ## To run for all SNPs (biallelic and tri and tetra allelic)
   new.pat <- ipat.snps
   new.pat <- sapply(new.pat, function(x, pat){ x + length(pat)}, pat = bippat)
-  new.pat <- c(ipat, new.pat)
+  new.pat <- c(ipat, unlist(new.pat))
   
   #The Manhattan plot organised by PCs for SNP GWAS
   .plot_pc_manhattan(o = o, 

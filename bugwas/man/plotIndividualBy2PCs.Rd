@@ -7,17 +7,17 @@
 plotIndividualBy2PCs(biallelic = NULL, config = NULL)
 }
 \arguments{
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 }
 \description{
 This function generates a plot of the sample on the first two principal components.
 }
 \examples{
-plotIndividualBy2PCs(biallelic = biallelic, config = config)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+plotIndividualBy2PCs(biallelic = data$biallelic, config = data$config)
 }
-\keyword{Reduced}
-\keyword{plot}
-\keyword{space}
+\keyword{Reduced-space-plot}
 

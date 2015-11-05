@@ -7,11 +7,11 @@
 genVarPlots(genVars, biallelic, config, colourPalette = NULL)
 }
 \arguments{
-\item{genVars}{A list called 'genVars' created from the bugwas function. It is a required input.}
+\item{genVars}{A list called 'genVars' created from the lin_loc function. It is a required input.}
 
-\item{biallelic}{A list called 'biallelic' created from the bugwas function. It is a required input.}
+\item{biallelic}{A list called 'biallelic' created from the lin_loc function. It is a required input.}
 
-\item{config}{A list called 'config' created from the bugwas function. It is a required input.}
+\item{config}{A list called 'config' created from the lin_loc function. It is a required input.}
 
 \item{colourPalette}{A vector of colours colour the significant principal components identified by the Bayesian Wald test (see testGenomeWidePCs). If this is NULL then colours are chosen from a default colour palette.}
 }
@@ -19,8 +19,9 @@ genVarPlots(genVars, biallelic, config, colourPalette = NULL)
 This function generates the various Manhattan plots for general variants.
 }
 \examples{
-genVarPlots(genVars = genVars, biallelic = biallelic, config = config)
+data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo,
+ prefix = prefix, gem.path = gem.path)
+genVarPlots(genVars = data$genVars, biallelic = data$biallelic, config = data$config)
 }
-\keyword{Manhattan}
-\keyword{plot}
+\keyword{Manhattan-plot}
 

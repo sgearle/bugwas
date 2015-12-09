@@ -64,6 +64,7 @@
 #' @param lambda Lambda from GEMMA.
 #' @param output.dir Output file directory.
 #' @param creatingAllPlots Whether to create all bugwas plots. Default = TRUE.
+#' @param allBranchAndPCCor Whether or not to retreive correlation matrix between branches and PCs. Default = FALSE.
 #' @keywords bacteria GWAS locus lineage wald GEMMA
 #' @export
 #' @examples
@@ -122,7 +123,7 @@ lin_loc <- function(gen = NULL,
   lambda = extractInputArgument(arg = lambda, canBeNULL = TRUE)
   output.dir = extractInputArgument(arg = output.dir, default = getwd())
   creatingAllPlots = extractInputArgument(arg = creatingAllPlots, default = TRUE)
-  allBranchAndPCCor = extractInputArgument(arg = creatingAllPlots, default = FALSE)
+  allBranchAndPCCor = extractInputArgument(arg = allBranchAndPCCor, default = FALSE)
 
 	SNPdata <- get_SNP_data(gen = gen, pheno = pheno, prefix = prefix)
 	XX.all <- SNPdata$XX.all

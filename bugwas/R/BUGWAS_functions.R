@@ -981,6 +981,7 @@ get_tree <- function(phylo = NULL,
 	tree <- ape::read.tree(paste0(prefix, "_midpointrooted_tree.txt"))
 	treepat <- tree2patterns(tree = tree, tiporder = XX.ID)
 	mtp <- treepat$pat
+	message("Retrieve all correlations between branches and PCs: ",allBranchAndPCCor)
 	cor.tree <- get_correlations(
 		XX = mtp, pca = pca$x, npcs = npcs, id = XX.ID, all.cor = allBranchAndPCCor)
 

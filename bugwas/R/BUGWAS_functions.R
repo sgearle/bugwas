@@ -268,21 +268,41 @@ tree2patterns <- function(tree = NULL,
 		tiporder <- tree$tip.label
 	}
 	n <- length(tree$tip.label)
+	
+	
 	mtp <- matrix(0,n,n+tree$Nnode)
+	
+	#Sorting out tree patterns for external nodes.
 	mtp[,1:n] <- diag(n)
+	
+	#Sorting out tree patterns for internal nodes.
 	for(i in 1:tree$Nnode) {
 		wh <- match(ape::extract.clade(tree, n+i)$tip.label, tree$tip.label)
 		mtp[wh, n+i] <- 1
 	}
+	
+	#Reorder the rows to match the order of the individuals
 	mtp <- mtp[match(tiporder, tree$tip.label), ]
+	
+	if(is.null(tree$node.label)){
+		tree$node.label = paste("node",1:tree$Nnode+n, sep="")
+	}
+	
+	
+	
 	mtp.f <- apply(mtp, 2, mean)
 	mtp[, mtp.f>0.5] <- 1-mtp[, mtp.f>0.5]
 	mtp.f <- apply(mtp, 2, mean)
+	
+	#Label the rows and columns of tree patterns.
 	rownames(mtp) <- tiporder
-	colnames(mtp) <- paste("Node", 1:ncol(mtp), sep="_")
+	colnames(mtp)[1:n] <- tiporder
+	colnames(mtp)[1:tree$Nnode + n] = tree$node.label
+	
+	
 	edge <- match(1:ncol(mtp), tree$edge[, 2])
 	edge.length <- tree$edge.length[edge]
-	return(list("pat" = mtp,
+	return(list("pat" = mtp, "labelled.tree" = tree,
 				"ancestral_edge" = edge,
 				"ancestral_edge.length" = edge.length))
 }

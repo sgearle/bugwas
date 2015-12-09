@@ -296,8 +296,7 @@ tree2patterns <- function(tree = NULL,
 	
 	#Label the rows and columns of tree patterns.
 	rownames(mtp) <- tiporder
-	colnames(mtp)[1:n] <- tiporder
-	colnames(mtp)[1:tree$Nnode + n] = tree$node.label
+	colnames(mtp) = c(tiporder, tree$node.label)
 	
 	
 	edge <- match(1:ncol(mtp), tree$edge[, 2])
@@ -322,15 +321,19 @@ tree2patterns <- function(tree = NULL,
 get_correlations <- function (XX = NULL, 
 							  pca = NULL,
 							  npcs = NULL,
-							  id = NULL){
+							  id = NULL,
+							  all.cor  = FALSE){
 	
 	
 	cor.XX.pca <- cor(XX,pca[, 1:npcs])
 	cor.XX.pca[is.na(cor.XX.pca)] = 0
 	which.pc <- apply(abs(cor.XX.pca), 1, which.max)
 	max.cor.pc <- apply(abs(cor.XX.pca), 1, max)
-	
-	return(list("which.pc" = which.pc, "max.cor.pc" = max.cor.pc))
+	if(all.cor){
+		return(list("which.pc" = which.pc, "max.cor.pc" = max.cor.pc, "all.cor.pc" = cor.XX.pca))
+	}else{
+		return(list("which.pc" = which.pc, "max.cor.pc" = max.cor.pc))
+	}
 	
 }
 
@@ -964,7 +967,8 @@ get_tree <- function(phylo = NULL,
 					 prefix = NULL,
 					 XX.ID = NULL,
 					 pca = NULL,
-					 npcs = NULL){
+					 npcs = NULL,
+					 allBranchAndPCCor = FALSE){
 	# Read in tree
 	tree <- ape::read.tree(phylo)
 	
@@ -977,7 +981,8 @@ get_tree <- function(phylo = NULL,
 	tree <- ape::read.tree(paste0(prefix, "_midpointrooted_tree.txt"))
 	treepat <- tree2patterns(tree = tree, tiporder = XX.ID)
 	mtp <- treepat$pat
-	cor.tree <- get_correlations(XX = mtp, pca = pca$x, npcs = npcs, id = XX.ID)
+	cor.tree <- get_correlations(
+		XX = mtp, pca = pca$x, npcs = npcs, id = XX.ID, all.cor = allBranchAndPCCor)
 
 	return(list("tree" = tree, "pattern" = treepat, "cor.tree" = cor.tree))
 	

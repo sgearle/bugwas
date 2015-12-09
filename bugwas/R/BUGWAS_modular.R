@@ -98,7 +98,8 @@ lin_loc <- function(gen = NULL,
                    lognull = NULL,
                    lambda = NULL,
                    output.dir = getwd(),
-                   creatingAllPlots = TRUE){
+                   creatingAllPlots = TRUE,
+                   allBranchAndPCCor = FALSE){
     
   gen = extractInputArgument(arg = gen, checkExist = TRUE)
   pheno = extractInputArgument(arg = pheno, checkExist = TRUE)
@@ -121,6 +122,7 @@ lin_loc <- function(gen = NULL,
   lambda = extractInputArgument(arg = lambda, canBeNULL = TRUE)
   output.dir = extractInputArgument(arg = output.dir, default = getwd())
   creatingAllPlots = extractInputArgument(arg = creatingAllPlots, default = TRUE)
+  allBranchAndPCCor = extractInputArgument(arg = creatingAllPlots, default = FALSE)
 
 	SNPdata <- get_SNP_data(gen = gen, pheno = pheno, prefix = prefix)
 	XX.all <- SNPdata$XX.all
@@ -171,6 +173,7 @@ lin_loc <- function(gen = NULL,
 						  	   XX.ID = XX.ID,
 						  	   pca = pca$pca,
 						  	   npcs = npcs)
+	message("Biallelic data processed successfully.")
 
 	if(!is.null(XX.all$XX.tritetra)){						  
 		tritetra <- get_tritetra(logreg.tri.tetra = logreg.tri.tetra,
@@ -187,6 +190,7 @@ lin_loc <- function(gen = NULL,
 						 	 	npcs = npcs,
 						 	 	XX.ID = XX.ID,
 						 	 	maf = maf)
+		message("tri/tetrallelic data processed successfully.")
 	} else {
 		tritetra = NULL
 	}
@@ -206,6 +210,7 @@ lin_loc <- function(gen = NULL,
 					  	  run.lmm = run.lmm,
 					  	  pca = pca$pca,
 					  	  npcs = npcs)
+		message("General binary data processed successfully.")
 	} else {
 		genVars = NULL
 	}
@@ -215,7 +220,9 @@ lin_loc <- function(gen = NULL,
 						prefix = prefix,
 						XX.ID = XX.ID,
 						pca = pca$pca,
-						npcs = npcs)
+						npcs = npcs,
+						allBranchAndPCCor = allBranchAndPCCor)
+	message("Tree data processed successfully.")
 
 
 	# Ridge regression

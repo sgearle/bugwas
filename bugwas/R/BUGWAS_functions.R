@@ -984,6 +984,13 @@ get_tree <- function(phylo = NULL,
 	message("Retrieve all correlations between branches and PCs: ",allBranchAndPCCor)
 	cor.tree <- get_correlations(
 		XX = mtp, pca = pca$x, npcs = npcs, id = XX.ID, all.cor = allBranchAndPCCor)
+		
+	if(allBranchAndPCCor){
+		branchPCCorFileName = paste(prefix, "allBranchAndPCCor.txt", sep="_" )
+		write.table(signif(cor.tree$all.cor.pc, digits = 3), branchPCCorFileName, 
+		row.names = T, col.names = T, quote=F, sep="\t")
+		ape::write.tree(treepat$labelled.tree, paste0(prefix, "_node_labelled_tree.txt"))
+	}
 
 	return(list("tree" = tree, "pattern" = treepat, "cor.tree" = cor.tree))
 	

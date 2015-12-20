@@ -72,3 +72,5 @@ testGenomeWidePCs = function(config = NULL, biallelic = NULL){
   
   return(p.genomewidepc)
 }
+
+

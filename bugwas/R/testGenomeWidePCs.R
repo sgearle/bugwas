@@ -25,11 +25,12 @@
 #' Testing the genome-wide principal components
 #' 
 #' This function performs the genome-wide principal components.
-#' @param biallelic A list called 'biallelic' created from the bugwas function
-#' @param config A list called 'config' created from the bugwas function
+#' @param biallelic A list called 'biallelic' created from the bugwas function.
+#' @param config A list called 'config' created from the bugwas function.
 #' @keywords Bayesian-Wald-test
 #' @keywords PCA
 #' @return The p-value of the Bayesian Wald test for the genome-wide effect of principal components.
+#' @export
 #' @examples
 #' data <- lin_loc(gen = gen, pheno = pheno, phylo = phylo, 
 #'  prefix = prefix, gem.path = gem.path)

@@ -1261,7 +1261,7 @@ get_SNP_data <- function(gen = NULL,
 	
 	# Read in SNP data
 
-	XX <- read.table(gen,header=T,sep="\t",as.is=T)
+	XX <- read.table(gen,header=T,sep="\t",as.is=T, check.names = F)
 	
 	if(any(colnames(XX)=="ps")){
 		XX_ps <- XX[,"ps"]

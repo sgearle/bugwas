@@ -100,7 +100,8 @@ lin_loc <- function(gen = NULL,
                    lambda = NULL,
                    output.dir = getwd(),
                    creatingAllPlots = TRUE,
-                   allBranchAndPCCor = FALSE){
+                   allBranchAndPCCor = FALSE,
+                   runTriTetrallelic = TRUE){
     
   gen = extractInputArgument(arg = gen, checkExist = TRUE)
   pheno = extractInputArgument(arg = pheno, checkExist = TRUE)
@@ -124,6 +125,7 @@ lin_loc <- function(gen = NULL,
   output.dir = extractInputArgument(arg = output.dir, default = getwd())
   creatingAllPlots = extractInputArgument(arg = creatingAllPlots, default = TRUE)
   allBranchAndPCCor = extractInputArgument(arg = allBranchAndPCCor, default = FALSE)
+  runTriTetrallelic = extractInputArgument(arg = runTriTetrallelic, default = TRUE)
 
 	SNPdata <- get_SNP_data(gen = gen, pheno = pheno, prefix = prefix)
 	XX.all <- SNPdata$XX.all
@@ -153,10 +155,14 @@ lin_loc <- function(gen = NULL,
 	
 	
 	XX <- rescale_variants(var = XX.all$XX, varpat = XX.all$bippat)
+	message("Rescaled variants.")
+	
 	svd.XX <- svd(XX)
+	message("Single value decomposition complete.")
 
 	# PCA on the bips
 	pca <- do_pca(pcs = pcs, XX = XX, XX.ID = XX.ID)
+	message("Principle component analysis complete.")
 	
 	biallelic <- get_biallelic(logreg.bi = logreg.bi,
 		 					   XX.all = XX.all,
@@ -176,7 +182,7 @@ lin_loc <- function(gen = NULL,
 						  	   npcs = npcs)
 	message("Biallelic data processed successfully.")
 
-	if(!is.null(XX.all$XX.tritetra)){						  
+	if(!is.null(XX.all$XX.tritetra) & runTriTetrallelic){						  
 		tritetra <- get_tritetra(logreg.tri.tetra = logreg.tri.tetra,
 						 	 	XX.all = XX.all,
 						 	 	lmm.tri.tetra = lmm.tri.tetra,

@@ -10,7 +10,7 @@ lin_loc(gen = NULL, pheno = NULL, phylo = NULL, prefix = NULL,
   logreg.var = NULL, lmm.var = NULL, cutOffCor = 0, run.lmm = TRUE,
   maf = 0, relmatrix = NULL, lognull = NULL, lambda = NULL,
   output.dir = getwd(), creatingAllPlots = TRUE,
-  allBranchAndPCCor = FALSE)
+  allBranchAndPCCor = FALSE, runTriTetrallelic = TRUE)
 }
 \arguments{
 \item{gen}{A file name specified by either a variable of mode character, or a double-quoted string, containing imputed haploid SNP data. Rows are SNPs, and columns are samples, with the first column being SNP positions. Column headers must contain 'ps' for the SNP positions with the others being the sample names. This must contain biallelic SNPs, but can also contain tri and tetra-allelic SNPs. Required argument.}

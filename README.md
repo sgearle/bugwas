@@ -11,6 +11,9 @@ The package requires the modified version of GEMMA version 0.93. The executable 
 If you would like to use our R package please site the paper on the following webpage:
 http://arxiv.org/abs/1510.06863
 
+If you have any queries, please post them on 
+https://groups.google.com/forum/#!forum/bacterialgwas-users
+
 Creators:
 Sarah Earle, NDM, Oxford University
 Jessie Wu, NDM, Oxford University

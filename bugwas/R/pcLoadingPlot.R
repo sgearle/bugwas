@@ -66,7 +66,7 @@ pcLoadingPlot = function(config, biallelic){
     
       png(paste0(dirName,"/",prefix,"_PC",pcOrder[pc.lim[i]],"_weighted_loadings.png"),
           width=1000,height=700)
-      plot(x = bipPos, y = a[ipat], 
+      plot(x = as.numeric(bipPos), y = as.numeric(a[ipat]), 
            xlab = "Position in genome", 
            ylab = paste0("PC",pcOrder[pc.lim[i]]," weighted loadings"),
            cex=0.6)

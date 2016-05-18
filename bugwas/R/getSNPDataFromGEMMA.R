@@ -39,5 +39,5 @@ getSNPDataFromGEMMA <- function(gemmaGenFile = NULL,
 	XX.all <- getDataFromGemma(prefix = prefix, gemmaGenFile = gemmaGenFile, gemmaSnpFile = gemmaSnpFile, id = sample_ID)
 	
 	return(list("XX.all" = XX.all, "sample_ID" = sample_ID,
-				"npcs" = npcs, "y" = y, "XX.ID" = sample_ID))	
+				"npcs" = npcs, "y" = pheno, "XX.ID" = sample_ID))	
 }

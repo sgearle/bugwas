@@ -16,7 +16,7 @@
 getDataFromGemma = function(prefix = NULL, gemmaGenFile = NULL, gemmaSnpFile = NULL, id = NULL){
 	
 	gemmaGen.df = read.table(file=gemmaGenFile, header=F, as.is=T)
-	gemmaSNP.df = read.table(file=gemmaGenFile, header=F, as.is=T)
+	gemmaSNP.df = read.table(file=gemmaSnpFile, header=F, as.is=T)
 	bipCount = nrow(gemmaGen.df)
 	dataCount = ncol(gemmaGen.df) - 3
 	

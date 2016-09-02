@@ -97,7 +97,7 @@ genVarPlots = function(genVars, biallelic, config, colourPalette = NULL){
                     pValues = genVars[[iGenVar]]$logreg$negLog10,
                     snpType = rep(1,count),
                     main = "Logistic Regression SNPs Manhattan Plot",
-                    col = genVarCol,
+                    col = genVarCol[genVars[[iGenVar]]$pattern],
                     xlab = "Variant Index")
     }
     
@@ -107,7 +107,7 @@ genVarPlots = function(genVars, biallelic, config, colourPalette = NULL){
                   pValues = genVars[[iGenVar]]$lmm$negLog10,
                   snpType = rep(1,count),
                   main = "LMM SNPs Manhattan Plot",
-                  col = genVarCol,
+                  col = genVarCol[genVars[[iGenVar]]$pattern],
                   xlab = "Variant Index")
     
     .plot_pc_manhattan(o = o, 

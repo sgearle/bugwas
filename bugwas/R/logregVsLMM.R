@@ -67,12 +67,13 @@ logregVsLMM = function(config, biallelic, triallelic, colourPalette = NULL){
 	logregPos = c(fit.lm$ps, fit.lm.tritetra$ps)
 	lmmPos = c(fit.lmm$ps, fit.lmm.tritetra$ps)
 	
-	if(identical(sort(logregPos),sort(lmmPos))){
+	if(!identical(sort(logregPos),sort(lmmPos))){
 		stop("The SNPs from the logistic regression do not match those from LMM.")
 	}
 	
 	logregPvalues = logregPvalues[order(logregPos)]
 	lmmPvalues = lmmPvalues[order(lmmPos)]
+	snpType = snpType[order(lmmPos)]
 
 	
 	snpColours = .getSNPColours(sampleCount = sampleCount,
@@ -88,7 +89,7 @@ logregVsLMM = function(config, biallelic, triallelic, colourPalette = NULL){
                            cor.XX = cor.XX)
                            
 	.logregVsLMM(prefix = config$prefix,
-				col = c(snpColours$bip, snpColours$ttp),
+				col = c(snpColours$bip, snpColours$ttp)[order(lmmPos)],
                          logregPvalues = logregPvalues,
                          lmmPvalues =  lmmPvalues,
                          snpType = snpType,

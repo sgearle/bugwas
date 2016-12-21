@@ -849,8 +849,8 @@ get_gen_var <- function(var.matrix = NULL,
 						pheno.file = NULL,
 						maf = NULL,
 						prefix = NULL,
-						path = NULL,
-						dir = NULL,
+						gem.path = NULL,
+						output.dir = NULL,
 						run.lmm = NULL,
 						pca = NULL,
 						npcs = NULL){
@@ -865,7 +865,7 @@ get_gen_var <- function(var.matrix = NULL,
 		genVarList = list()
 		for(iGenVar in 1:genVarCount){
 			genVarList[[iGenVar]] = list()
-			gen.var <- read.table(var.matrix[iGenVar], header=T, sep="\t")
+			gen.var <- read.table(var.matrix[iGenVar], header=T, sep="\t", check.names = F)
 			if(any(colnames(gen.var)=="ps")){
 				var_ps <- gen.var[,"ps"]
 				gen.var <- gen.var[, -which(colnames(gen.var)=="ps")]

@@ -1,4 +1,4 @@
-# File KmerAnalysisMain.R
+# File BUGWAS_modular.R
 # Authors: Earle, S. G., Wu, C.-H. and Wilson, D. J.
 #
 # Copyright (C) 2015 University of Oxford
@@ -212,8 +212,8 @@ lin_loc <- function(gen = NULL,
 					  	  pheno.file = pheno.file,
 					  	  maf = maf,
 					  	  prefix = prefix,
-					  	  path = gem.path,
-					  	  dir = output.dir,
+					  	  gem.path = gem.path,
+					  	  output.dir = output.dir,
 					  	  run.lmm = run.lmm,
 					  	  pca = pca$pca,
 					  	  npcs = npcs)

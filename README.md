@@ -1,22 +1,14 @@
 # bugwas
 R package to test for locus and lineage associations in bacterial GWAS
 
-To install this package in R:
-install.packages("[some_dir]/bugwas_1.0.tar.gz", repos = NULL, type="source")
-or
-install.packages("https://raw.githubusercontent.com/sgearle/bugwas/master/build/bugwas_1.0.tar.gz", repos=NULL, type="source")
+This branch is under development to create a new CRAN package, containing the necessary code for GEMMA.
 
-The bugwas_1.0.tar.gz file can be found in the build folder in this repository.
+To install the package in R, download the source code and run
+R CMD build bugwas
+from the bugwas directory, which will create a file called bugwas_version.tar.gz
+Ensure the GSL and LAPACK libraries are correctly installed
+Then in R run
+install.packages("directory-to-file/bugwas_version.tar.gz")
+and
+library(bugwas)
 
-The package requires the modified version of GEMMA version 0.93. The executable file is available in this github repository in the gemma folder.
-
-If you would like to use our R package please cite the paper on the following webpage:
-http://www.nature.com/articles/nmicrobiol201641
-
-If you have any queries, please post them on 
-https://groups.google.com/forum/#!forum/bacterialgwas-users
-
-Creators:
-Sarah Earle, NDM, Oxford University
-Jessie Wu, NDM, Oxford University
-Daniel Wilson, NDM, Oxford University
